@@ -58,23 +58,21 @@ fi
 
 echo "Attempting to cURL latest neovim"
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-if [[ $? -eq 0 ]]; then
-    echo "neovim cURL was successful, tar -C /opt"
-    sudo tar -C /opt -xzf nvim-linux64.tar.gz
-    sudo rm nvim-linux64.tar.gz
-else 
-    echo "cURLing neovim failed or something went wrong"
-    echo "Fallback to neovim stable release 0.10 instead..."
-    sudo tar -C /opt -xzf tarballs/nvim-linux64.tar.gz
-fi
+sudo tar -C /opt -xzf nvim-linux64.tar.gz
+sudo rm nvim-linux64.tar.gz
+
 
 echo "Installing build-essential"
 sudo apt install -y build-essential
 
-echo "Installing go through ./tarballs/"
-sudo rm -rf /usr/local/go 
-sudo tar -C /usr/local -xzf ./tarballs/go1.22.5.linux-amd64.tar.gz
 
+if [[ -d /usr/local/go ]]; then
+    sudo rm -rf /usr/local/go 
+fi
+
+curl -LO https://go.dev/dl/go1.22.5.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.22.5.linux-amd64.tar.gz
+sudo rm go1.22.5.linux-amd64.tar.gz
 
 echo "Installing JetBrains Mono font"
 sudo rm -rf ~/.local/share/fonts
